@@ -4,7 +4,7 @@ import { UpdateCityDto } from './dto/update-city.dto';
 import { City } from './entities/city.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { error } from 'console';
+import { CityQueryDto } from './dto/query-city.dto';
 
 @Injectable()
 export class CitiesService {
@@ -19,10 +19,22 @@ export class CitiesService {
     return await this.citiesRepo.save(createCityDto);
   }
 
-  async findAll() {
-    const cities = await this.citiesRepo.find();
+  async findAll(query: CityQueryDto) {
+    const where: any = {};
+
+    if (query.active !== undefined) {
+      where.active = query.active === 'true';
+    }
+    if (query.name !== undefined) {
+      where.name = query.name;
+    }
+    const cities = await this.citiesRepo.find({
+      where,
+    });
+
     return cities;
   }
+
 
   findOne(id: number) {
     return this.citiesRepo.findOneBy({ id });
@@ -38,6 +50,6 @@ export class CitiesService {
   }
 
   async remove(id: number) {
-    return await this.citiesRepo.delete({id});
+    return await this.citiesRepo.delete({ id });
   }
 }

@@ -2,13 +2,13 @@ import { IsString, IsOptional, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateCityDto {
     @IsString()
-    name : string;
+    name: string;
 
     @IsString()
     @IsOptional()
-    decription?: string;
+    decription: string;
 
     @IsOptional()
     @IsBoolean()
-    active? : boolean;
+    active?: boolean;
 }
